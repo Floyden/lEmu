@@ -5,12 +5,18 @@
 #include <cstring>
 #include <iostream>
 
+//length, cycles
+std::pair<uint8_t, uint8_t> opcode_table[] =
+{
+    {1,4} // NOOP
+};
+
 std::vector<char> LoadRom(std::string filename)
 {
     std::ifstream file(filename, std::ios::binary);
     std::vector<char> buffer(
-        (std::istreambuf_iterator<char>(file)),
-        (std::istreambuf_iterator<char>())
+        (std::istream_iterator<char>(file)),
+        (std::istream_iterator<char>())
     );
 
     return buffer;
@@ -78,6 +84,7 @@ void CPU::init()
 void CPU::run()
 {
     decode(regs.pc);
+    decode(regs.pc);
 }
 
 void CPU::decode(uint16_t location)
@@ -88,6 +95,8 @@ void CPU::decode(uint16_t location)
         case 0x00:
             break;
         default:
-            std::cout << "Unknown code: " << cmd << std::endl;
+            printf("Unknown code: %hhx\n", cmd);
+            exit(1);
     }
+    regs.pc += opcode_table[cmd].first;
 }
