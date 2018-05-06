@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstring>
 
-#include <SDL2/SDL.h>
+// #include <SDL2/SDL.h>
 
 #include "Memory.h"
 #include "CPU.h"

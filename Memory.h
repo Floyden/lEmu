@@ -1,12 +1,15 @@
 #pragma once
-#include <cstdint>
-
-
+#include "Prerequisites.h"
 
 struct MemoryMap
 {
     uint8_t loadRomBank0(const uint8_t* data, uint32_t size);
     uint8_t loadRomBank(const uint8_t* data, uint32_t size);
+
+    u8 readByte(u16 addr);
+    u16 readShort(u16 addr);
+
+    u8 writeByte(u16 addr, u8 val);
 
     union
     {

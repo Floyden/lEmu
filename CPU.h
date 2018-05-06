@@ -1,6 +1,5 @@
 #pragma once
-#include <cstdint>
-#include <vector>
+#include "Prerequisites.h"
 #include "Memory.h"
 
 struct Registers
@@ -9,54 +8,71 @@ struct Registers
     {
         struct
         {
-            uint8_t f;
-            uint8_t a;
+            u8 f;
+            u8 a;
         };
-        uint16_t af;
+        u16 af;
     };
 
     union
     {
         struct
         {
-            uint8_t c;
-            uint8_t b;
+            u8 c;
+            u8 b;
         };
-        uint16_t bc;
+        u16 bc;
     };
     union
     {
         struct
         {
-            uint8_t e;
-            uint8_t d;
+            u8 e;
+            u8 d;
         };
-        uint16_t de;
+        u16 de;
     };
     union
     {
         struct
         {
-            uint8_t l;
-            uint8_t h;
+            u8 l;
+            u8 h;
         };
-        uint16_t hl;
+        u16 hl;
     };
 
-    uint16_t sp;
-    uint16_t pc;
+    u16 sp;
+    u16 pc;
+
+    void setZeroFlag()          { f |= 0x80; }
+    void setSubstractFlag()     { f |= 0x40; }
+    void setHalfCarryFlag()     { f |= 0x20; }
+    void setCarryFlag()         { f |= 0x10; }
+
+    void clearZeroFlag()        { f &= (~0x80); }
+    void clearSubstractFlag()   { f &= (~0x40); }
+    void clearHalfCarryFlag()   { f &= (~0x20); }
+    void clearCarryFlag()       { f &= (~0x10); }
+
+    void setAllFlags()          { f = 0xF0; }
+    void clearAllFlags()        { f = 0; }
 };
 
 class CPU
 {
 public:
+    CPU() {};
     ~CPU();
     void init();
     void run();
 
-    void decode(uint16_t);
+    void step();
 
     Registers regs;
-    MemoryMap* map;
-    std::vector<char> loaded_rom;
+    MemoryMap* mem;
+    Vec<u8> loaded_rom;
+
+private:
+    CPU(const CPU&) = delete;
 };
